@@ -34,7 +34,7 @@ Centralized sales records · Branch-level access · Collection tracking · Finan
 - 14. Conclusion
 </details>
 
-1. Project Overview
+1. **Project Overview**
 The Sales Management System is a centralized web application developed using Python and Streamlit, with MySQL as its database management system. It supports sales entry, customer records, payment allocations, pending collections, and financial reporting across multiple branches.
 
 The system is designed around two access levels:
@@ -55,7 +55,7 @@ Database automation	Use triggers/generated columns where implemented
 [!NOTE]
 Verify each feature against the latest application code and database schema before presenting it as implemented.
 
-2. Technology Stack
+2. **Technology Stack**
 Component	Technology	Responsibility
 Programming language	Python	Application logic
 Dashboard and UI	Streamlit	User interface, pages, filters, and metrics
@@ -67,7 +67,7 @@ Reporting	Streamlit tables, metrics, filters, and charts	Display business inform
 Database automation	Triggers/generated columns, where implemented	Apply configured database rules
 
 
-3. Streamlit Application Development
+3. **Streamlit Application Development**
 The application provides sales management, reporting, and data-entry functionality according to the authenticated user's role.
 3.1 Application Structure
 Streamlit-Project/
@@ -85,7 +85,7 @@ c.sales.py	Customer Sales table and role-based record filtering
 .streamlit/secrets.toml	Local database configuration; must not be committed to source control
 
 
-3.2 Centralized Dashboard
+3.2 **Centralized Dashboard**
 The dashboard's functional areas include:
 - Sales entry and management
 - Payment split allocation
@@ -120,7 +120,7 @@ flowchart TD
     G --> H["Create authenticated session"]
     H --> I["Open authorized pages"]
 ```
-4.3 Session-Based Login Management
+4.3 **Session-Based Login Management**
 The application may maintain these session values after successful authentication:
 Session key	Purpose
 logged_in	Authentication status
@@ -130,15 +130,15 @@ branch_id	Assigned branch identifier
 
 
 Check authentication before rendering protected pages and before executing sensitive database operations.
-4.4 Logout Functionality
+4.4 **Logout Functionality**
 1. End the authenticated session.
 2. Clear or invalidate relevant authentication state.
 3. Return the user to the login page.
 4. Block protected access until the user signs in again.
-4.5 Unauthorized Access Prevention
+4.5 **Unauthorized Access Prevention**
 Unauthenticated users must not access dashboards, sales records, payment details, or SQL execution features. Authorization must be enforced on protected pages and database operations; hiding navigation items alone is not sufficient.
-5. Role-Based Access Control
-5.1 Super Admin
+5. **Role-Based Access Control**
+5.1 **Super Admin**
 The Super Admin is intended to have organization-wide access to authorized functionality:
 - View sales records across all branches.
 - Create sales entries for any branch.
@@ -150,7 +150,7 @@ The Super Admin is intended to have organization-wide access to authorized funct
 - Analyze payment methods and sales statuses.
 - Access business analytics and reports.
 - Execute authorized predefined SQL queries.
-5.2 Admin
+5.2 **Admin**
 Each Admin is restricted to the assigned branch:
 - Create sales entries for the assigned branch only.
 - Add payment split records for sales belonging to that branch.
@@ -160,7 +160,7 @@ Each Admin is restricted to the assigned branch:
 - Monitor Open and Close statuses.
 - View branch-level payment method summaries.
 - Access only approved SQL queries and results.
-5.3 Role and Permission Matrix
+5.3 **Role and Permission Matrix**
 Functionality	Super Admin	Admin
 View all branches	Yes	No
 Create sales for any branch	Yes	No
@@ -179,43 +179,43 @@ Branch-specific analytics	Yes	Yes
 Advanced SQL functionality	Approved queries	Restricted queries
 
 
-5.4 Branch-Level Data Security
+5.4 **Branch-Level Data Security**
 Every Admin must be restricted to their assigned branch_id. For example, a Chennai Admin must not retrieve Delhi or Bangalore records by changing filters, navigation, or SQL input. Branch assignment must come from trusted authentication data and be validated on the server.
 Core access rule: Super Admin can create and view data across all branches. An Admin can create and view data only for their assigned branch.
 
-6. Dashboard Features
-6.1 Add a New Sales Entry
+6.** Dashboard Features**
+6.1 **Add a New Sales Entry**
 - Record branch, sale date, customer name, mobile number, product, gross sales, received amount, and status as applicable.
 - Validate required fields and numeric values.
 - Allow Super Admin to select any authorized branch.
 - Derive or validate the branch for Admin users from their authenticated session.
 - Save valid entries to MySQL and refresh relevant reports.
-6.2 Add Payment Split Records
+6.2 **Add Payment Split Records**
 - Select an existing sale and enter the payment amount.
 - Choose Cash, UPI, or Card and provide other required details.
 - Validate the allocation and sale association.
 - Save payment split records to MySQL.
 - Refresh received and pending amounts according to the implemented rules.
-6.3 View Sales Reports
+6.3 **View Sales Reports**
 - Filter by branch, product, date range, and status where available.
 - Allow Super Admin to analyze records across branches.
 - Restrict Admin reports to the assigned branch.
-6.4 Branch Filter
+6.4 **Branch Filter**
 - Super Admin can select any available branch or all branches.
 - Admin users remain restricted to their assigned branch.
 - Tables, metrics, and charts must reflect the authorized filtered dataset.
-6.5 Pending Payment Monitoring
+6.5 **Pending Payment Monitoring**
 - Calculate pending amount using gross sales minus received amount, subject to payment allocation rules.
 - Identify outstanding collections.
 - Avoid double-counting payment split records.
-6.6 Sales Status — Open vs Close
+6.6 **Sales Status — Open vs Close**
 Display and filter Open and Close statuses using the business rules that define when a sale is considered closed.
-6.7 Payment Method Summary
+6.7 **Payment Method Summary**
 Summarize Cash, UPI, and Card payments. Super Admin can compare branches; Admin users see their assigned branch's information.
-6.8 Predefined SQL Query Execution — Mandatory
+6.8 **Predefined SQL Query Execution — Mandatory**
 The SQL query interface is intended to execute approved, predefined business queries. It should support query selection, categories where configured, execution, result display, and safe error handling.
 
-Expected query topics include:
+**Expected query topics include:**
 - Total sales by branch
 - Total received and pending amounts
 - Sales by product
@@ -224,7 +224,7 @@ Expected query topics include:
 - Branch-wise revenue comparison
 - Date-based sales trends
 The SQL Engine must use appropriate database permissions and controlled query execution. Admin users must not bypass branch restrictions by editing SQL or executing unrestricted queries.
-6.9 Financial KPI Summary
+6.9 **Financial KPI Summary**
 KPI	Definition
 Total Gross Sales	Sum of gross sales for the authorized dataset and reporting period
 Total Received Amount	Customer payments received, calculated consistently with payment records
@@ -237,7 +237,7 @@ Pending Collection Percentage	Pending amount divided by gross sales, multiplied 
 \frac{\text{Total Pending Amount}}{\text{Total Gross Sales}} \times 100
 \]
 Handle zero gross sales safely. Every KPI must respect user permissions and active filters.
-7. Insights and Reporting
+7. **Insights and Reporting**
 Report / Insight	Business value
 Overall business revenue	Monitor gross sales across the organization
 Branch-wise sales comparison	Compare revenue, collections, and pending amounts by branch
@@ -249,16 +249,16 @@ Branch performance summary	Consolidate revenue, collections, pending amounts, an
 
 
 Super Admin can compare all branches. Admin users can view only the metrics for their assigned branch.
-8. MySQL Database Design and Management
-8.1 Users Table
+8. **MySQL Database Design and Management**
+8.1 **Users Table**
 Stores authentication and role assignment information. Expected logical fields may include a user identifier, username, password hash, role, branch identifier, and account status where supported. Actual column names must match the implementation.
-8.2 Branches Table
+8.2 **Branches Table**
 Field	Purpose
 branch_id	Branch identifier
 branch_name	Branch name displayed in the application
 
 
-8.3 Customer Sales Table
+8.3 **Customer Sales Table**
 Field	Purpose
 sale_id	Sale identifier
 branch_id	Associated branch
@@ -273,9 +273,9 @@ status	Sale status
 
 Schema note: The known database spelling is recieved_amount. SQL queries must use the actual column name unless the schema is deliberately changed.
 
-8.4 Payment Splits Table
+8.4 **Payment Splits Table**
 Stores individual payment allocations associated with sales. The known payment amount field is amount_paid. Verify foreign keys, payment method, transaction identifiers, and date fields against the live schema.
-8.5 Logical Database Relationships
+8.5 **Logical Database Relationships**
 The following diagram represents the intended logical relationships. Verify the actual foreign-key constraints and cardinality against the database.
 ```mermaid
 flowchart TD
@@ -283,9 +283,9 @@ flowchart TD
     B -->|"one branch has many sales"| S["Customer Sales"]
     S -->|"one sale may have multiple allocations"| P["Payment Splits"]
 ```
-8.6 MySQL Triggers and Generated Columns
+8.6 **MySQL Triggers and Generated Columns**
 The requirements include automated financial calculations using triggers and generated columns where appropriate. Triggers execute database logic on defined events; generated columns derive values from other columns in the same row, subject to MySQL restrictions. Verify the actual definitions against the database scripts.
-9. Complete Application Pipeline
+9. **Complete Application Pipeline**
 ```mermaid
 flowchart TD
     A["Open Streamlit application"] --> B["app.py loads registered pages"]
@@ -307,7 +307,7 @@ flowchart TD
     P --> Q["Display dashboard and sales data"]
     Q --> R["Logout and clear session"]
 ```
-9.1 Data Flow
+9.1 **Data Flow**
 1. The user submits a request through the Streamlit interface.
 2. The application validates the input and user permissions.
 3. A parameterized SQL operation is executed.
@@ -335,7 +335,7 @@ Database connection fails	Safe, understandable error is displayed
 
 
 Testing should also cover boundary conditions, duplicate submissions, missing data, zero sales totals, and multiple payments for the same sale.
-11. Security Requirements
+11. **Security Requirements**
 - Store password hashes rather than plaintext passwords.
 - Use parameterized SQL queries.
 - Enforce authorization in server-side logic and database operations.
@@ -348,7 +348,7 @@ Testing should also cover boundary conditions, duplicate submissions, missing da
 - Verify authentication before rendering protected pages.
 - Clear authentication state on logout.
 - Restrict SQL execution to approved operations and authorized data.
-12. Deployment Pipeline
+12. **Deployment Pipeline**
 1. Complete application development.
 2. Validate the database schema and relationships.
 3. Configure the MySQL connection.
@@ -372,7 +372,7 @@ Recommended .gitignore entries:
 .venv/
 __pycache__/
 *.py[cod]
-13. Project Deliverables
+13. **Project Deliverables**
 - Centralized Streamlit application
 - Login and logout module
 - Role-based access for Super Admin and Admin
@@ -386,7 +386,7 @@ __pycache__/
 - MySQL schema and relevant database automation
 - Functionality and access-control testing
 - Technical documentation and deployment instructions
-14. Conclusion
+14. **Conclusion**
 The Sales Management System provides a centralized platform for monitoring sales operations, payment collections, and financial performance across multiple branches. It combines Streamlit for interactive dashboards, Python and Pandas for data processing, and MySQL for structured data storage and querying.
 
 Its core objectives are secure authentication, branch-specific access control, accurate payment tracking, automated financial calculations, predefined SQL analytics, and actionable business reporting. The Super Admin receives an organization-wide view, while each Admin is restricted to the assigned branch.
@@ -395,6 +395,6 @@ This document describes the required system functionality and the known project 
 <div align="center">
 
 
-Sales Management System
+**Sales Management System**
 Technical Documentation · Multi-Branch Operations · Business Analytics
 </div>
